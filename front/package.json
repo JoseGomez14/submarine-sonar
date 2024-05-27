@@ -1,0 +1,19 @@
+{
+  "name": "sonar-graphic-interface",
+  "version": "0.1.0",
+  "description": "Submarine Sonar Graphic Interface for web clients",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "author": "Jose Gómez - Daniel Lujan - Emanuel López",
+  "license": "MIT",
+  "dependencies": {
+    "next": "14.2.3",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "socket.io-client": "4.7.5"
+  }
+}
