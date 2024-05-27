@@ -130,35 +130,17 @@ void writeRGB(int pinR, int pinG, int pinB, int R, int G, int B)
 
 void sayHello()
 {
-  servoMotor.write(90);
-  writeRGB(LED_RED, LED_GREEN, LED_BLUE, 255, 0, 120);
-  delay(400);
-  servoMotor.write(0);
-  writeRGB(LED_RED, LED_GREEN, LED_BLUE, 0, 255, 0);
-  delay(400);
-  servoMotor.write(180);
-  writeRGB(LED_RED, LED_GREEN, LED_BLUE, 0, 0, 255);
-  delay(400);
-  servoMotor.write(60);
-  writeRGB(LED_RED, LED_GREEN, LED_BLUE, 255, 0, 120);
-  delay(200);
-  servoMotor.write(120);
-  writeRGB(LED_RED, LED_GREEN, LED_BLUE, 0, 255, 0);
-  delay(200);
-  servoMotor.write(60);
-  writeRGB(LED_RED, LED_GREEN, LED_BLUE, 0, 0, 255);
-  delay(200);
-  servoMotor.write(120);
-  writeRGB(LED_RED, LED_GREEN, LED_BLUE, 255, 0, 0);
-  delay(200);
-  servoMotor.write(60);
-  writeRGB(LED_RED, LED_GREEN, LED_BLUE, 0, 0, 255);
-  delay(200);
-  servoMotor.write(120);
-  writeRGB(LED_RED, LED_GREEN, LED_BLUE, 255, 0, 0);
-  delay(200);
-  servoMotor.write(90);
-  writeRGB(LED_RED, LED_GREEN, LED_BLUE, 255, 0, 0);
+  int servoPositions[] = {0, 90, 180, 60, 120, 60, 120, 90};
+  int delayTimes[] = {400, 400, 400, 200, 200, 200, 200, 200};
+  int RGBColors[][3] = {{255, 0, 0}, {0, 255, 0}, {0, 0, 255}, {255, 0, 120}, {0, 255, 0}, {0, 0, 255}, {255, 0, 0}, {0, 0, 255}};
+
+  for (int i = 0; i < 9; i++)
+  {
+    servoMotor.write(servoPositions[i]);
+    writeRGB(LED_RED, LED_GREEN, LED_BLUE, RGBColors[i][0], RGBColors[i][1], RGBColors[i][2]);
+    delay(delayTimes[i]);
+  }
+
   delay(1000);
   turnOffRGB(LED_RED, LED_GREEN, LED_BLUE);
 }
