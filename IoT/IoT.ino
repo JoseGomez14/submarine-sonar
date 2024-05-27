@@ -1,4 +1,5 @@
 #include <Servo.h>
+#include <NewPing.h>
 
 #define SERVO_PIN 5
 #define ECHO_PIN 2
@@ -8,12 +9,13 @@
 #define LED_GREEN 10
 #define LED_BLUE 11
 
-#define MIN_DISTANCE 5
-#define MAX_DISTANCE 150
+#define MIN_DISTANCE 2
+#define MAX_DISTANCE 50
 #define DELAY_PER_STEP 30
 #define DEEGRES_PER_STEP 2
 
 Servo servoMotor;
+NewPing sonar(TRIG_PIN, ECHO_PIN, MAX_DISTANCE);
 
 int servoDirection = 0;
 int servoPosition = 0;
@@ -64,16 +66,10 @@ int readUltrasonicSensor(int trig, int echo)
   int pulseDuration;
   int objectDistante;
 
-  digitalWrite(trig, LOW);
-  delayMicroseconds(2);
-  digitalWrite(trig, HIGH);
-  delayMicroseconds(10);
-  digitalWrite(trig, LOW);
+  unsigned int uS = sonar.ping();
+  objectDistante = uS / US_ROUNDTRIP_CM;
 
-  pulseDuration = pulseIn(echo, HIGH);
-  objectDistante = pulseDuration * 0.034 / 2;
-
-  if (objectDistante < MIN_DISTANCE || objectDistante > MAX_DISTANCE)
+  if (objectDistante == 0)
   {
     return -1;
   }
