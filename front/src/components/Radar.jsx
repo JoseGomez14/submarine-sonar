@@ -5,8 +5,9 @@ import { useEffect, useState } from "react";
 import { socket } from "../services/sonar";
 
 export default function Radar() {
-  const MAX_DISTANCE = 150;
+  const MAX_DISTANCE = process.env.NEXT_PUBLIC_MAX_SENSOR_DISTANCE || 150;
   const PI = Math.PI;
+  const WS_CONNECTION_URL = process.env.NEXT_PUBLIC_SERVER_URL_WS;
 
   const radarCircles = [0.25, 0.5, 0.75, 1];
 
@@ -28,7 +29,7 @@ export default function Radar() {
       color: "#00ff26",
     });
 
-    socket.on("userdata124", (data) => {
+    socket.on(WS_CONNECTION_URL, (data) => {
       let { position, distance } = data;
       setRadarData({
         position: parseInt(position),
