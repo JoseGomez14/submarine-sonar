@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 
+import RadarInfo from "./RadarInfo";
 import { calcObjects } from "@/utils";
 import { socket } from "../services/sonar";
 
@@ -9,13 +10,14 @@ const MAX_DISTANCE = process.env.NEXT_PUBLIC_MAX_SENSOR_DISTANCE || 150;
 const PI = Math.PI;
 const WS_EVENT = process.env.NEXT_PUBLIC_SERVER_URL_WS || "userdata123";
 
-export default function Radar({ plotObjects = false }) {
+export default function Radar() {
   const radarCircles = [0.25, 0.5, 0.75, 1];
 
   const [radarLineOptions, setRadarLineOptions] = useState({});
   const [radarData, setRadarData] = useState({});
   const [radarPoints, setRadarPoints] = useState({});
   const [objects, setObjects] = useState({});
+  const [plotObjects, setPlotObjects] = useState(false);
 
   useEffect(() => {
     let windowWidth = 0;
@@ -77,6 +79,13 @@ export default function Radar({ plotObjects = false }) {
 
   return (
     <div className="radar">
+      <RadarInfo
+        radarData={radarData}
+        plotObjects={plotObjects}
+        setPlotObjects={setPlotObjects}
+        objects={objects}
+      />
+
       <div
         className="radar__scan"
         style={{

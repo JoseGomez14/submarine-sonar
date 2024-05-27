@@ -1,0 +1,11 @@
+.modeSelector{
+  cursor: pointer;
+  background-color: transparent;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.25rem;
+}
+
+.modeSelector svg {
+  stroke: rgb(var(--foreground-rgb));
+}
