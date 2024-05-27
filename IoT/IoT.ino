@@ -1,3 +1,9 @@
+/*
+  IoT.ino - IoT project for object detection using an ultrasonic sensor and a servo motor
+  Created by Jose Gómez, Daniel Lujan, and Emanuel López, May 2024
+  Released under MIT License
+*/
+
 #include <Servo.h>
 #include <NewPing.h>
 
@@ -21,6 +27,10 @@ int servoDirection = 0;
 int servoPosition = 0;
 int objectDistante = 0;
 
+/*
+  Setup function
+  Initializes the servo motor, ultrasonic sensor, and RGB LED
+*/
 void setup()
 {
   servoMotor.attach(SERVO_PIN);
@@ -36,6 +46,10 @@ void setup()
   sayHello();
 }
 
+/*
+  Loop function
+  Moves the servo motor from 0 to 180 degrees and back, reading the ultrasonic sensor and updating the RGB LED
+*/
 void loop()
 {
   servoDirection = 1;
@@ -43,7 +57,7 @@ void loop()
   for (servoPosition = 0; servoPosition <= 180; servoPosition += DEEGRES_PER_STEP)
   {
     servoMotor.write(servoPosition);
-    objectDistante = readUltrasonicSensor(TRIG_PIN, ECHO_PIN);
+    objectDistante = readUltrasonicSensor();
     printInfo(servoPosition, servoDirection, objectDistante);
     updateRGBIndicator(LED_RED, LED_GREEN, LED_BLUE, objectDistante, MIN_DISTANCE, MAX_DISTANCE);
     delay(DELAY_PER_STEP);
@@ -54,14 +68,20 @@ void loop()
   for (servoPosition = 180 - DEEGRES_PER_STEP; servoPosition >= DEEGRES_PER_STEP; servoPosition -= DEEGRES_PER_STEP)
   {
     servoMotor.write(servoPosition);
-    objectDistante = readUltrasonicSensor(TRIG_PIN, ECHO_PIN);
+    objectDistante = readUltrasonicSensor();
     printInfo(servoPosition, servoDirection, objectDistante);
     updateRGBIndicator(LED_RED, LED_GREEN, LED_BLUE, objectDistante, MIN_DISTANCE, MAX_DISTANCE);
     delay(DELAY_PER_STEP);
   }
 }
 
-int readUltrasonicSensor(int trig, int echo)
+/*
+  Function to read the ultrasonic sensor and return the distance in centimeters
+
+  Returns:
+    The distance in centimeters, or -1 if no object is detected
+*/
+int readUltrasonicSensor()
 {
   int pulseDuration;
   int objectDistante;
@@ -79,6 +99,17 @@ int readUltrasonicSensor(int trig, int echo)
   }
 }
 
+/*
+  Function to update the RGB LED based on the distance read by the ultrasonic sensor
+
+  Parameters:
+    pinR: The pin number for the red LED
+    pinG: The pin number for the green LED
+    pinB: The pin number for the blue LED
+    val: The value to map to the RGB LED
+    minVal: The minimum value for the mapping
+    maxVal: The maximum value for the mapping
+*/
 void updateRGBIndicator(int pinR, int pinG, int pinB, int val, int minVal, int maxVal)
 {
   int mappedVal = map(val, minVal, maxVal, 0, 100);
@@ -104,6 +135,14 @@ void updateRGBIndicator(int pinR, int pinG, int pinB, int val, int minVal, int m
   }
 }
 
+/*
+  Function to print the servo position, direction, and object distance to the serial monitor
+
+  Parameters:
+    servoPosition: The current position of the servo motor
+    servoDirection: The direction the servo motor is moving
+    objectDistance: The distance read by the ultrasonic sensor
+*/
 String printInfo(int servoPosition, int servoDirection, int objectDistance)
 {
   Serial.print(servoPosition);
@@ -113,6 +152,14 @@ String printInfo(int servoPosition, int servoDirection, int objectDistance)
   Serial.println(objectDistance);
 }
 
+/*
+  Function to turn off the RGB LED
+
+  Parameters:
+    pinR: The pin number for the red LED
+    pinG: The pin number for the green LED
+    pinB: The pin number for the blue LED
+*/
 void turnOffRGB(int pinR, int pinG, int pinB)
 {
   digitalWrite(pinR, LOW);
@@ -120,6 +167,17 @@ void turnOffRGB(int pinR, int pinG, int pinB)
   digitalWrite(pinB, LOW);
 }
 
+/*
+  Function to write to the RGB LED
+
+  Parameters:
+    pinR: The pin number for the red LED
+    pinG: The pin number for the green LED
+    pinB: The pin number for the blue LED
+    R: The value for the red LED
+    G: The value for the green LED
+    B: The value for the blue LED
+*/
 void writeRGB(int pinR, int pinG, int pinB, int R, int G, int B)
 {
   turnOffRGB(pinR, pinG, pinB);
@@ -128,6 +186,9 @@ void writeRGB(int pinR, int pinG, int pinB, int R, int G, int B)
   digitalWrite(pinB, B);
 }
 
+/*
+  Function to move the servo motor to the initial position and display a greeting sequence
+*/
 void sayHello()
 {
   int servoPositions[] = {0, 90, 180, 60, 120, 60, 120, 90};
