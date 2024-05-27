@@ -1,19 +1,17 @@
 {
-  "name": "sonar-iot-local-server",
+  "name": "sonar-backend-server",
   "version": "1.0.0",
-  "description": "Submarine sonar IoT real time local server data transmission",
+  "description": "Submarine sonar backend service for data transmision from IoT to users",
   "main": "index.js",
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js",
-    "prod": "node --env-file .env index.js",
+    "start": "node --env-file .env index.js",
     "dev": "node --env-file .env.development index.js"
   },
   "author": "Jose Gómez - Daniel Lujan - Emanuel López",
   "license": "MIT",
   "dependencies": {
-    "serialport": "12.0.0",
-    "socket.io-client": "4.7.5"
+    "socket.io": "4.7.5"
   }
 }
