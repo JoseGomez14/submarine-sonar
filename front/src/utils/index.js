@@ -1,3 +1,5 @@
+import Swal from "sweetalert2";
+
 export const calcObjects = (points, direction, radarLineOptions) => {
   const MIN_POINTS = 7; // Mínimo de puntos para ser considerado un objeto
   const MAX_DISTANCE = parseInt(
@@ -15,8 +17,6 @@ export const calcObjects = (points, direction, radarLineOptions) => {
     if (pointCounter >= MIN_POINTS) {
       const w =
         2 * avgDistance * Math.tan((PI * (pointCounter - 1 - 7.5)) / 180);
-      // console.log({ pointCounter, w, angle });
-      console.log(objects);
       const x =
         ((avgDistance *
           Math.cos(((angle - (pointCounter - 1 * direction)) * PI) / 180)) /
@@ -24,16 +24,31 @@ export const calcObjects = (points, direction, radarLineOptions) => {
         radarLineOptions.width;
       const y =
         ((avgDistance *
-          Math.sin(((angle - (pointCounter - 1 * direction)) * PI) / 180)) /
+          Math.sin(((angle + (pointCounter - 1 * direction)) * PI) / 180)) /
           MAX_DISTANCE) *
         radarLineOptions.width;
       objects[angle] = {
         width: w,
+        distance: avgDistance,
         x,
         y,
       };
+
+      if (avgDistance < 0.25 * MAX_DISTANCE && !Swal.isVisible()) {
+        Swal.fire({
+          title: "¡Alerta!",
+          text: "Se ha detectado un obstaculo demasiado cerca",
+          position: "center",
+          backdrop: false,
+          background: "#000500DD",
+          icon: "warning",
+          iconColor: "#FF0000",
+          timer: 3500,
+          confirmButtonColor: "#FF0000",
+          allowEscapeKey: true,
+        });
+      }
     }
-    // console.log(objects);
     pointCounter = 0;
     distanceSum = 0;
   };
