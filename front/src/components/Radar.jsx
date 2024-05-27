@@ -8,7 +8,7 @@ import { socket } from "../services/sonar";
 
 const MAX_DISTANCE = process.env.NEXT_PUBLIC_MAX_SENSOR_DISTANCE || 150;
 const PI = Math.PI;
-const WS_EVENT = process.env.NEXT_PUBLIC_SERVER_URL_WS || "userdata123";
+const WS_EVENT = process.env.NEXT_PUBLIC_SERVER_URL_WS || "userdata";
 
 export default function Radar() {
   const radarCircles = [0.25, 0.5, 0.75, 1];
@@ -106,6 +106,9 @@ export default function Radar() {
             transformOrigin: `${radarLineOptions.width}px 
             ${radarLineOptions.height / 2}px`,
             boxShadow: `0 0 25px ${radarLineOptions.color}`,
+            position: "fixed",
+            top: `calc(100vh - ${radarLineOptions.height}px)`,
+            left: `calc(50vw - ${radarLineOptions.width}px)`,
           }}
         ></div>
       </div>
