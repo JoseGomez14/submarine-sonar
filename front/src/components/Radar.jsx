@@ -2,18 +2,20 @@
 
 import { useEffect, useState } from "react";
 
+import { calcObjects } from "@/utils";
 import { socket } from "../services/sonar";
 
-export default function Radar() {
-  const MAX_DISTANCE = process.env.NEXT_PUBLIC_MAX_SENSOR_DISTANCE || 150;
-  const PI = Math.PI;
-  const WS_CONNECTION_URL = process.env.NEXT_PUBLIC_SERVER_URL_WS;
+const MAX_DISTANCE = process.env.NEXT_PUBLIC_MAX_SENSOR_DISTANCE || 150;
+const PI = Math.PI;
+const WS_EVENT = process.env.NEXT_PUBLIC_SERVER_URL_WS || "userdata123";
 
+export default function Radar({ plotObjects = false }) {
   const radarCircles = [0.25, 0.5, 0.75, 1];
 
   const [radarLineOptions, setRadarLineOptions] = useState({});
   const [radarData, setRadarData] = useState({});
   const [radarPoints, setRadarPoints] = useState({});
+  const [objects, setObjects] = useState({});
 
   useEffect(() => {
     let windowWidth = 0;
@@ -27,18 +29,21 @@ export default function Radar() {
       width: windowHeight < windowWidth ? windowHeight : windowWidth,
       height: 5,
       color: "#00ff26",
+      objectsColor: "#d1a700",
     });
 
-    socket.on(WS_CONNECTION_URL, (data) => {
-      let { position, distance } = data;
+    socket.on(WS_EVENT, (data) => {
+      let { position, distance, direction } = data;
       setRadarData({
         position: parseInt(position),
         distance: parseInt(distance),
+        direction: parseInt(direction),
       });
     });
   }, []);
 
   useEffect(() => {
+    if (Object.keys(radarData).length == 0) return;
     if (radarData.distance !== -1) {
       const radarPoint = {
         x:
@@ -49,12 +54,22 @@ export default function Radar() {
           ((radarData.distance * Math.sin((radarData.position * PI) / 180)) /
             MAX_DISTANCE) *
           radarLineOptions.width,
+        distance: radarData.distance,
       };
 
       setRadarPoints({
         ...radarPoints,
         [radarData.position]: radarPoint,
       });
+      const k = calcObjects(
+        {
+          ...radarPoints,
+          [radarData.position]: radarPoint,
+        },
+        radarData.direction,
+        radarLineOptions
+      );
+      setObjects(k);
     } else {
       delete radarPoints[radarData.position];
     }
@@ -86,22 +101,44 @@ export default function Radar() {
         ></div>
       </div>
 
-      {Object.keys(radarPoints).map((key, index) => (
-        <div
-          key={index}
-          className="radar__point"
-          style={{
-            position: "fixed",
-            width: "1rem",
-            height: "1rem",
-            background: radarLineOptions.color,
-            top: `calc(100vh - 1rem - ${radarPoints[key].y}px)`,
-            left: `calc(50vw + ${radarPoints[key].x}px - 0.5rem)`,
-            borderRadius: "50%",
-            boxShadow: `0 0 2rem ${radarLineOptions.color}55`,
-          }}
-        ></div>
-      ))}
+      {plotObjects
+        ? Object.keys(objects).map((key, index) => {
+            return (
+              <div
+                key={index}
+                className="radar__point"
+                style={{
+                  position: "fixed",
+                  transition: "all 0.5s",
+                  animation: "pulse 1s infinite",
+                  width: objects[key].width * 0.2 + "rem",
+                  height: objects[key].width * 0.2 + "rem",
+                  background: radarLineOptions.objectsColor,
+                  top: `calc(100vh - 1rem - ${objects[key].y}px)`,
+                  left: `calc(50vw + ${objects[key].x}px - 0.5rem)`,
+                  borderRadius: "50%",
+                  boxShadow: `0 0 2rem ${radarLineOptions.objectsColor}55`,
+                  zIndex: 100,
+                }}
+              ></div>
+            );
+          })
+        : Object.keys(radarPoints).map((key, index) => (
+            <div
+              key={index}
+              className="radar__point"
+              style={{
+                position: "fixed",
+                width: "1rem",
+                height: "1rem",
+                background: radarLineOptions.color,
+                top: `calc(100vh - 1rem - ${radarPoints[key].y}px)`,
+                left: `calc(50vw + ${radarPoints[key].x}px - 0.5rem)`,
+                borderRadius: "50%",
+                boxShadow: `0 0 2rem ${radarLineOptions.color}55`,
+              }}
+            ></div>
+          ))}
 
       <div
         className="radar__circule__central"
