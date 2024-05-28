@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-
+import Swal from "sweetalert2";
 import RadarInfo from "./RadarInfo";
 import { calcObjects } from "@/utils";
 import { socket } from "../services/sonar";
@@ -9,6 +9,7 @@ import { socket } from "../services/sonar";
 const MAX_DISTANCE = process.env.NEXT_PUBLIC_MAX_SENSOR_DISTANCE || 150;
 const PI = Math.PI;
 const WS_EVENT = process.env.NEXT_PUBLIC_SERVER_URL_WS || "userdata";
+const DEMO_URL = process.env.NEXT_PUBLIC_DEMO_URL;
 
 export default function Radar() {
   const radarCircles = [0.25, 0.5, 0.75, 1];
@@ -18,6 +19,34 @@ export default function Radar() {
   const [radarPoints, setRadarPoints] = useState({});
   const [objects, setObjects] = useState({});
   const [plotObjects, setPlotObjects] = useState(false);
+
+  useEffect(() => {
+    const id = setTimeout(() => {
+      Swal.fire({
+        title: "¡Información!",
+        text: "Parece que el sensor ultrasonido no está conectado. Puedes observar un vídeo de demostración en el siguiente enlace:",
+        position: "center",
+        backdrop: true,
+        background: "#000500DD",
+        icon: "info",
+        color: "#fff",
+        iconColor: "#1fd6ff",
+        confirmButtonColor: "#ff0000",
+        confirmButtonText: "Youtube",
+        allowEscapeKey: false,
+        focusConfirm: false,
+        allowOutsideClick: false,
+        preConfirm: () => {
+          window.open(DEMO_URL, "_blank");
+          return false;
+        },
+      });
+    }, 3500);
+    return () => {
+      clearTimeout(id);
+      Swal.close();
+    };
+  }, [radarData]);
 
   useEffect(() => {
     let windowWidth = 0;
