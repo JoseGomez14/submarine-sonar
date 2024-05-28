@@ -63,7 +63,7 @@ const RadarInfo = ({ radarData, plotObjects, setPlotObjects, objects }) => {
         </span>
       </div>
       <div className="radar__info__item">
-        <span>Tamño del obstaculo: </span>
+        <span>Tamaño del obstaculo: </span>
         <span>
           {closestObject
             ? `${(closestObject.width)} cm`
