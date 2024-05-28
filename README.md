@@ -25,6 +25,14 @@ Además, contamos con la colaboración del profesor encargado del Laboratiorio I
 - [Socket.io](https://socket.io/)
 - [Next.js](https://nextjs.org/)
 
+## Esquema de la Aplicación
+
+![diagrama-despliegue](https://github.com/JoseGomez14/submarine-sonar/assets/110755221/5e795877-ddb8-42f1-af2c-78c8d5d61386)
+
+## Esquema de conexión del Arduino
+
+![esquema](https://github.com/JoseGomez14/submarine-sonar/assets/110755221/0959d2f5-215f-455f-bcce-5dc5f436027f)
+
 ## Instalación y ejecución local
 
 1. Clonar el repositorio
@@ -38,7 +46,7 @@ git clone https://github.com/JoseGomez14/submarine-sonar.git
 El código que se encuentra en la carpeta `/IoT` debe ser cargado en el Arduino. Para ello, se debe tener instalado el IDE de Arduino y seleccionar el puerto COM correspondiente. Además, se debe tener en cuenta que el Arduino debe estar conectado al sensor de ultrasonido como se muestra en el [esquema de conexión](#esquema-de-conexión-del-arduino).
 
 > [!NOTE]
-> El código está pensado para un Arduino Uno o Nano, y sensor de ultrasonido HC-SR04. Si se desea utilizar otro modelo de Arduino o sensor, se deben realizar las modificaciones necesarias. 
+> El código está pensado para un Arduino Uno o Nano, y sensor de ultrasonido HC-SR04. Si se desea utilizar otro modelo de Arduino o sensor, se deben realizar las modificaciones necesarias.
 
 3. Servidor Local
 
@@ -46,7 +54,6 @@ El servidor local se encuentra en la carpeta `/IoT/server`. Para ejecutarlo, se 
 
 > [!NOTE]  
 > En el archivo `/IoT/server/.env.development` se encuentra la configuración del puerto en el que se ejecutará el servidor y el puerto del socket que debe coincidir con el puerto configurado en el Arduino.
-
 
 ```bash
 cd IoT/server
@@ -82,7 +89,3 @@ npm run dev
 
 > [!TIP]
 > De esta forma, se podrá acceder a la aplicación web en la dirección `http://localhost:3000`.
-
-## Esquema de conexión del Arduino
-
-![esquema](https://github.com/JoseGomez14/submarine-sonar/assets/110755221/0959d2f5-215f-455f-bcce-5dc5f436027f)
