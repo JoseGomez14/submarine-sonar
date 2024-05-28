@@ -85,7 +85,7 @@ export default function Radar() {
         setPlotObjects={setPlotObjects}
         objects={objects}
       />
-
+      <audio id="radarSound" src="/AudioSonar.mp3" preload="auto"></audio>
       <div
         className="radar__scan"
         style={{

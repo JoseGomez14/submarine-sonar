@@ -35,6 +35,7 @@ export const calcObjects = (points, direction, radarLineOptions) => {
       };
 
       if (avgDistance < 0.25 * MAX_DISTANCE && !Swal.isVisible()) {
+        document.getElementById("radarSound").play();
         Swal.fire({
           title: "¡Alerta!",
           text: "Se ha detectado un obstaculo demasiado cerca",
