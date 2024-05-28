@@ -2,7 +2,7 @@
 <h1>Sonar para submarinos 🤖🔈</h1>
 <h2>Este proyecto se basa en la construcción de un sonar para submarinos aplicando IoT, desarrollo Web y aplicaciones de física de ondas.</h2>
 
-<h2><a href='https://submarine-sonar.vercel.app/'>WEB</a> | <a href='/'>DEMO</a> </h2>
+<h2><a href='https://submarine-sonar.vercel.app/'>WEB</a> | <a href='https://youtu.be/t7pTKbmdcfI'>DEMO</a> </h2>
 </div>
 El sonar es un dispositivo que emite ondas sonoras y recibe las ondas reflejadas por los objetos que se encuentran en el agua. A partir de la información recibida, se puede determinar la distancia a la que se encuentra el objeto y su tamaño.
 
