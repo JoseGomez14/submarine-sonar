@@ -19,9 +19,11 @@ export default function Radar() {
   const [radarPoints, setRadarPoints] = useState({});
   const [objects, setObjects] = useState({});
   const [plotObjects, setPlotObjects] = useState(false);
+  const [noData, setNoData] = useState(false);
 
   useEffect(() => {
     const id = setTimeout(() => {
+      setNoData(true);
       Swal.fire({
         title: "¡Información!",
         text: "Parece que el sensor ultrasonido no está conectado. Puedes observar un vídeo de demostración en el siguiente enlace:",
@@ -44,7 +46,10 @@ export default function Radar() {
     }, 3500);
     return () => {
       clearTimeout(id);
-      Swal.close();
+      if (noData) {
+        setNoData(false);
+        Swal.close();
+      }
     };
   }, [radarData]);
 
